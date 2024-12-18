@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Text After #</title>
+    <style>
+        /* Universal styles */
+        body {
+            background-color: #1f1f1f;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .content {
+            max-width: 90%;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #ffcc00;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content" id="content">
+    <h1>Loading...</h1>
+</div>
+
+<script>
+    // Function to parse the hash and display the formatted content
+    function displayContent() {
+        const contentDiv = document.getElementById('content');
+        const hash = decodeURIComponent(window.location.hash.substring(1)); // Decode and remove #
+        
+        if (!hash.trim()) {
+            contentDiv.innerHTML = '<h1>No Content Found</h1>';
+            return;
+        }
+
+        const lines = hash.split('\\n'); // Split by \n for new lines
+        const formattedContent = lines.map(line => {
+            if (line.startsWith('#')) {
+                return `<h1>${line.substring(1).trim()}</h1>`; // Render titles for lines starting with #
+            } else {
+                return `<p>${line.trim()}</p>`; // Render paragraphs for other lines
+            }
+        }).join('');
+
+        contentDiv.innerHTML = formattedContent;
+    }
+
+    // Display content on page load
+    displayContent();
+
+    // Re-render content when the hash changes
+    window.onhashchange = displayContent;
+</script>
+
+</body>
+</html>
