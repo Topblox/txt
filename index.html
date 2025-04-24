@@ -42,6 +42,16 @@
 </div>
 
 <script>
+    // Function to sanitize the input to prevent XSS attacks
+    function sanitizeInput(input) {
+        // Create a temporary element to use the browser's built-in escaping
+        const div = document.createElement('div');
+        if (input) {
+            div.textContent = input; // Text content escapes special characters
+        }
+        return div.innerHTML; // Return the sanitized string
+    }
+
     // Function to parse the hash and display the formatted content
     function displayContent() {
         const contentDiv = document.getElementById('content');
@@ -54,6 +64,8 @@
 
         const lines = hash.split('\\n'); // Split by \n for new lines
         const formattedContent = lines.map(line => {
+            line = sanitizeInput(line); // Sanitize each line of input
+
             if (line.startsWith('#')) {
                 return `<h1>${line.substring(1).trim()}</h1>`; // Render titles for lines starting with #
             } else {
